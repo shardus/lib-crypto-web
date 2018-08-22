@@ -1,0 +1,26 @@
+{
+  "name": "ulc-crypto-utils",
+  "version": "0.0.1",
+  "description": "Provides simple crypto functions for the web, as used by the Shardus project.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shardus/shardus-crypto-web.git"
+  },
+  "contributors": [
+    "Aamir Syed",
+    "Derrick Farris"
+  ],
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Shardus/shardus-crypto-web/issues"
+  },
+  "homepage": "https://github.com/Shardus/shardus-crypto-web#readme",
+  "dependencies": {
+    "json-stable-stringify": "*",
+    "libsodium-wrappers": "^0.7.3"
+  }
+}
