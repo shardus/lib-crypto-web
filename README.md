@@ -1,5 +1,5 @@
 # shardus-crypto-web
-Web crypto utilities as used by the Shardus project.
+Web crypto utilities as used by the Shardus project. Provides basic cryptography functions utilizing libsodium, with a simple API:
 
 ```JavaScript
 const crypto = require('shardus-crypto-web')
