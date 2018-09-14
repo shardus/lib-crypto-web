@@ -8,17 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Shardus/shardus-crypto-web.git"
+    "url": "https://gitlab.com/shardus/shardus-crypto-web"
   },
   "contributors": [
     "Aamir Syed",
     "Derrick Farris"
   ],
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Shardus/shardus-crypto-web/issues"
-  },
-  "homepage": "https://github.com/Shardus/shardus-crypto-web#readme",
+  "homepage": "https://gitlab.com/shardus/shardus-crypto-web#readme",
   "dependencies": {
     "json-stable-stringify": "*",
     "libsodium-wrappers": "^0.7.3"
