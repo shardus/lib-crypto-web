@@ -1,5 +1,5 @@
 {
-  "name": "ulc-crypto-utils",
+  "name": "shardus-crypto-utils",
   "version": "0.0.1",
   "description": "Provides simple crypto functions for the web, as used by the Shardus project.",
   "main": "index.js",
