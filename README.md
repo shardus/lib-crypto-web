@@ -53,7 +53,7 @@ crypto.verifyObj(obj)
 
 ## Install
 
-`npm install ULCproject/shardus-crypto-web`
+`npm install gitlab:Shardus/shardus-crypto-web`
 
 ## Use
 
