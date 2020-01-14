@@ -5,7 +5,9 @@ let sodium
 let HASH_KEY
 
 function _throwUninitErr () {
-  throw new Error('Initialize function must be called before using other functions from this library.')
+  throw new Error(
+    'Initialize function must be called before using other functions from this library.'
+  )
 }
 
 // Returns 32-bytes random hex string, otherwise the number of bytes can be specified as an integer
@@ -21,7 +23,9 @@ function randomBytes (bytes = 32) {
 function hash (input, fmt = 'hex') {
   if (!sodium) _throwUninitErr()
   if (!HASH_KEY) {
-    throw new Error('Hash key must be passed to the initialize function before .')
+    throw new Error(
+      'Hash key must be passed to the initialize function before .'
+    )
   }
   if (typeof input !== 'string') {
     throw new TypeError('Input must be a string or buffer.')
@@ -54,7 +58,9 @@ function hashObj (obj, removeSign = false) {
   }
   if (removeSign) {
     if (!obj.sign) {
-      throw Error('Object must contain a sign field if removeSign is flagged true.')
+      throw Error(
+        'Object must contain a sign field if removeSign is flagged true.'
+      )
     }
     let signObj = obj.sign
     delete obj.sign
@@ -66,11 +72,88 @@ function hashObj (obj, removeSign = false) {
   }
 }
 
+function encryptAB (input, pub, sec) {
+  let inputBuf, pubBuf, secBuf, pubBoxBuf, secBoxBuf, nonce, encrypted
+  if (!sodium) _throwUninitErr()
+  if (typeof input !== 'string') {
+    throw new TypeError('Message to encrypt must be a string.')
+  }
+  try {
+    pubBuf = sodium.from_hex(pub)
+  } catch (e) {
+    throw new TypeError('Secret key string must be in hex format')
+  }
+  try {
+    secBuf = sodium.from_hex(sec)
+  } catch (e) {
+    throw new TypeError('Secret key string must be in hex format')
+  }
+  inputBuf = sodium.from_string(input)
+  // we need to convert signing keys to boxing keys
+  pubBoxBuf = sodium.crypto_sign_ed25519_pk_to_curve25519(pubBuf)
+  secBoxBuf = sodium.crypto_sign_ed25519_sk_to_curve25519(secBuf)
+  // a random number that must be passed on to the recipient along with the message
+  nonce = sodium.randombytes_buf(sodium.crypto_box_NONCEBYTES)
+  try {
+    encrypted = sodium.crypto_box_easy(inputBuf, nonce, pubBoxBuf, secBoxBuf)
+  } catch (e) {
+    throw new TypeError('Could not encrypt the message')
+  }
+
+  return sodium.to_hex(nonce) + ':' + sodium.to_base64(encrypted)
+}
+
+function decryptAB (input, pub, sec) {
+  let inputBuf, pubBuf, secBuf, pubBoxBuf, secBoxBuf, nonce, decrypted
+  let nonceHex, inputBase64
+
+  if (!sodium) _throwUninitErr()
+  if (typeof input !== 'string') {
+    throw new TypeError('Message to decrypt must be a string.')
+  }
+  try {
+    ;[nonceHex, inputBase64] = input.split(':')
+    nonce = sodium.from_hex(nonceHex)
+    inputBuf = sodium.from_base64(inputBase64)
+  } catch (e) {
+    throw new TypeError(
+      'Message to decrypt in must have nonce:ciphertext as hex:base64'
+    )
+  }
+  try {
+    pubBuf = sodium.from_hex(pub)
+  } catch (e) {
+    throw new TypeError('Secret key string must be in hex format')
+  }
+  try {
+    secBuf = sodium.from_hex(sec)
+  } catch (e) {
+    throw new TypeError('Secret key string must be in hex format')
+  }
+  // we need to convert signing keys to boxing keys
+  pubBoxBuf = sodium.crypto_sign_ed25519_pk_to_curve25519(pubBuf)
+  secBoxBuf = sodium.crypto_sign_ed25519_sk_to_curve25519(secBuf)
+  try {
+    decrypted = sodium.crypto_box_open_easy(
+      inputBuf,
+      nonce,
+      pubBoxBuf,
+      secBoxBuf
+    )
+  } catch (e) {
+    throw new TypeError('Could not decrypt the message')
+  }
+
+  return sodium.to_string(decrypted)
+}
+
 // Generates and retuns {publicKey, secretKey} as hex strings
 function generateKeypair () {
+  let publicBox, privateBox
   if (!sodium) _throwUninitErr()
-  let {publicKey, privateKey} = sodium.crypto_sign_keypair()
-  console.log(privateKey)
+  let { publicKey, privateKey } = sodium.crypto_sign_keypair()
+  publicBox = sodium.crypto_sign_ed25519_pk_to_curve25519(publicKey)
+  // console.log('publicBox', publicBox)
   return {
     publicKey: sodium.to_hex(publicKey),
     secretKey: sodium.to_hex(privateKey)
@@ -150,7 +233,9 @@ function verify (msg, sig, pk) {
     let verified = sodium.to_hex(sodium.crypto_sign_open(sigBuf, pkBuf))
     return verified === msg
   } catch (e) {
-    throw new Error('Unable to verify provided signature with provided public key.')
+    throw new Error(
+      'Unable to verify provided signature with provided public key.'
+    )
   }
 }
 
@@ -160,13 +245,19 @@ function verifyObj (obj) {
     throw new TypeError('Input must be an object.')
   }
   if (!obj.sign || !obj.sign.owner || !obj.sign.sig) {
-    throw new Error('Object must contain a sign field with the following data: { owner, sig }')
+    throw new Error(
+      'Object must contain a sign field with the following data: { owner, sig }'
+    )
   }
   if (typeof obj.sign.owner !== 'string') {
-    throw new TypeError('Owner must be a public key represented as a hex string.')
+    throw new TypeError(
+      'Owner must be a public key represented as a hex string.'
+    )
   }
   if (typeof obj.sign.sig !== 'string') {
-    throw new TypeError('Signature must be a valid signature represented as a hex string.')
+    throw new TypeError(
+      'Signature must be a valid signature represented as a hex string.'
+    )
   }
   let objHash = hashObj(obj, true)
   return verify(objHash, obj.sign.sig, obj.sign.owner)
@@ -175,6 +266,7 @@ function verifyObj (obj) {
 async function initialize (key) {
   await _sodium.ready
   sodium = _sodium
+  console.log(sodium)
   if (!key) {
     throw new Error('Hash key must be passed to initialize function.')
   }
@@ -198,3 +290,5 @@ exports.sign = sign
 exports.signObj = signObj
 exports.verify = verify
 exports.verifyObj = verifyObj
+exports.encryptAB = encryptAB
+exports.decryptAB = decryptAB
