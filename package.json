@@ -17,7 +17,7 @@
   "license": "ISC",
   "homepage": "https://gitlab.com/shardus/shardus-crypto-web#readme",
   "dependencies": {
-    "json-stable-stringify": "*",
-    "libsodium-wrappers": "^0.7.3"
+    "json-stable-stringify": "1.0.1",
+    "libsodium-wrappers": "^0.7.9"
   }
 }
