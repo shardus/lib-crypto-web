@@ -4,11 +4,15 @@
   "description": "Provides simple crypto functions for the web, as used by the Shardus project.",
   "main": "index.js",
   "scripts": {
+    "release": "np --no-tests --no-yarn",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "https://gitlab.com/shardus/shardus-crypto-web"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "contributors": [
     "Aamir Syed",
@@ -19,5 +23,8 @@
   "dependencies": {
     "json-stable-stringify": "*",
     "libsodium-wrappers": "^0.7.3"
+  },
+  "devDependencies": {
+    "np": "^7.6.0"
   }
 }
