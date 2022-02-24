@@ -1,6 +1,6 @@
 {
   "name": "shardus-crypto-web",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Provides simple crypto functions for the web, as used by the Shardus project.",
   "main": "index.js",
   "scripts": {
