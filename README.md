@@ -4,8 +4,8 @@ Web crypto utilities as used by the Shardus project. Provides basic cryptography
 ```JavaScript
 const crypto = require('shardus-crypto-web')
 
-/* 
-  Module has an asynchronous initialize function that takes in a 32-byte hex key as required by node-sodium for generic hashing. 
+/*
+  Module has an asynchronous initialize function that takes in a 32-byte hex key as required by node-sodium for generic hashing.
   Initialize function must be awaited before utilizing any other functions in your code.
 */
 await crypto.initialize('64f152869ca2d473e4ba64ab53f49ccdb2edae22da192c126850970e788af347')
@@ -13,7 +13,7 @@ await crypto.initialize('64f152869ca2d473e4ba64ab53f49ccdb2edae22da192c126850970
 // Uses json-stable-stringify to stringify an object in a consistent sorted manner; returns a string
 crypto.stringify(obj)
 
-/* 
+/*
   Returns a 32-byte random hex string by default, otherwise you can
   specify how many bytes you would like to generate
 */
@@ -44,7 +44,7 @@ crypto.signObj(obj, sk, pk)
 // Returns true if the input was signed by the owner of the pk
 crypto.verify(input, sig, pk)
 
-/* 
+/*
   Returns true if the hash of the object minus the sign field matches
   the signed message in the sign field
 */
@@ -53,7 +53,13 @@ crypto.verifyObj(obj)
 
 ## Install
 
-`npm install gitlab:Shardus/shardus-crypto-web`
+`npm install @shardus/crypto-web`
+
+## Release
+
+If you're feeling daring and you want to make a publish to npm, go ahead and run
+`npm run release`. However I warn you - once you cross that threshhold, there is no
+going back. You'd better make sure you really want it.
 
 ## Use
 
