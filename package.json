@@ -21,8 +21,10 @@
   "license": "ISC",
   "homepage": "https://gitlab.com/shardus/shardus-crypto-web#readme",
   "dependencies": {
+    "blakejs": "^1.2.1",
     "json-stable-stringify": "*",
-    "libsodium-wrappers": "^0.7.3"
+    "tweetnacl": "^1.0.3",
+    "tweetnacl-util": "^0.15.1"
   },
   "devDependencies": {
     "np": "^7.6.0"
