@@ -1,6 +1,6 @@
 const nacl = require('tweetnacl');
 const blake = require('blakejs');
-const stringify = require('json-stable-stringify')
+const {safeJsonParse, safeStringify} = require('./utils/stringify')
 nacl.util = require('tweetnacl-util'); // Utility functions for encoding/decoding
 
 let HASH_KEY;
@@ -46,7 +46,7 @@ function hashObj (obj, removeSign = false) {
     throw TypeError('Input must be an object.')
   }
   function performHash (obj) {
-    let input = stringify(obj)
+    let input = safeStringify(obj)
     let hashed = hash(input)
     return hashed
   }
@@ -150,7 +150,7 @@ function signObj(obj, secretKey, publicKey) {
   }
 
   // Step 1: Hash the object using the hashObj function
-  let objStr = stringify(obj);
+  let objStr = safeStringify(obj);
   let hashed = hash(objStr); // Hash the object and return a hex string
 
   // Step 2: Sign the hashed object
@@ -213,3 +213,5 @@ exports.sign = sign;
 exports.signObj = signObj;
 exports.verify = verify;
 exports.verifyObj = verifyObj;
+exports.safeStringify = safeStringify;
+exports.safeJsonParse = safeJsonParse;
